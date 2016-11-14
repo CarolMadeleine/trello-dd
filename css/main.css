@@ -118,7 +118,7 @@ header{
   border-radius: 3px 3px;
   color: #4D4D4D;
   font-weight: bold;
-  margin: 0px 16px;
+  margin-left: 16px;
   background-color: #E2E4E6;
   word-wrap: break-word;
   width: 270px;
@@ -150,7 +150,7 @@ header{
   border-radius: 3px 3px;
   color: #4D4D4D;
   font-weight: bold;
-  margin: 0px 16px;
+  margin-left: 16px;
   background-color: #E2E4E6;
   width: 270px;
   display: inline-block;
