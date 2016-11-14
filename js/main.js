@@ -4,25 +4,28 @@ window.addEventListener("load", function(){
   var lista = document.getElementById("lista");
   var anadirForm = document.getElementById("anadirForm");
   var inputLista = document.getElementById("inputLista");
+  var iconoCruz = document.getElementById("iconoCruz");
   var botonGuardar = document.getElementById("botonGuardar");
+  var contador = 1;
 
-  lista.addEventListener("click", function(){
+  lista.addEventListener("click", añadir);
+  inputLista.addEventListener("keyup", validarInput);
+  botonGuardar.addEventListener("click", boxForm);
+  iconoCruz.addEventListener("click", iconoCruzHidden);
+
+  function añadir(e){
     lista.classList.add("hidden");
     anadirForm.classList.remove("hidden");
     inputLista.focus();
-  });
-
-  inputLista.addEventListener("keyup", function(){
+  }
+  function validarInput(){
     var long = inputLista.value.length;
-    if(long <= 0){
-      botonGuardar.disabled = true;
-    }else if(long >= 1){
-      botonGuardar.disabled = false;
+      if(long <= 0){
+        botonGuardar.disabled = true;
+      }else if(long >= 1){
+        botonGuardar.disabled = false;
+      }  
     }
-  });
-
-  botonGuardar.addEventListener("click", boxForm);
-
   function boxForm(e){
     e.preventDefault();
     anadirForm.classList.add("hidden");
@@ -34,9 +37,10 @@ window.addEventListener("load", function(){
     var anadirCard= document.createElement("div");
     var contenedor = document.createElement("div");
 
+    contenedor.classList.add("contenedor");
     mensajeTrello.classList.add("mensajeTrello");
     anadirCard.classList.add("añadirCard");
-    contenedor.classList.add("contenedor");
+    padre.setAttribute("draggable", "true");
 
     mensajeTrello.innerText = inputLista.value;
     inputLista.value = "";
@@ -49,8 +53,9 @@ window.addEventListener("load", function(){
     contenedor.insertBefore(lista,contenedor.childNodes[0]);
     contenedor.insertBefore(anadirForm,contenedor.childNodes[1]);
     
-    padre.addEventListener("dragover", dragSobrePadre);
-    padre.addEventListener("drop", soltar);
+    padre.addEventListener("dragover", dragSobre);
+    padre.addEventListener("drop", dragSoltar);
+
     anadirCard.addEventListener("click", anadirTarjeta);
 
     function anadirTarjeta(){
@@ -66,6 +71,7 @@ window.addEventListener("load", function(){
       botonAnadir.classList.add("botonCerrar");
       iconoLista.classList.add("icon-cross", "iconoLista");
       
+      iconoLista.setAttribute("id", "iconoLista");
       botonAnadir.setAttribute("type","button");
       botonAnadir.setAttribute("disabled", "true");
       botonAnadir.textContent = "Añadir";
@@ -76,25 +82,32 @@ window.addEventListener("load", function(){
       this.parentElement.appendChild(formulario);
 
       textArea.focus();
-      textArea.addEventListener("keyup", function(){
-        var long = textArea.value.length;
+      textArea.addEventListener("keyup", validarTextArea)
+        function validarTextArea(){
+          var long = textArea.value.length;
           if(long <= 0){
             botonAnadir.disabled = true;
           }else if(long >= 1){
             botonAnadir.disabled = false;
           }
-      });
+        }
 
       botonAnadir.addEventListener("click", tarjetaWhite);
+      iconoLista.addEventListener("click", iconoListaHidden);
+    }
+    function iconoListaHidden(){
+      this.parentElement.classList.add("hidden");
+      this.parentElement.previousSibling.classList.remove("hidden");
     }
     function tarjetaWhite(){
       var post = document.createElement("div");
 
       post.classList.add("post");
       anadirCard.classList.remove("hidden");
-      post.setAttribute("draggable", "true");
-      post.setAttribute("id","anadirCard");
       this.parentElement.classList.add("hidden");
+      
+      post.setAttribute("draggable", "true");
+      post.setAttribute("id", contador++);
       
       post.innerText = this.previousSibling.value;
 
@@ -102,30 +115,32 @@ window.addEventListener("load", function(){
       this.parentElement.parentElement.appendChild(anadirCard);
 
       post.addEventListener("dragstart", dragIniciado);
-      post.addEventListener("dragend", dragFinalizado);
-      post.addEventListener("dragleave", dragSalioPadre);
-
+      post.addEventListener("dragleave", dragSalir);
     }
     function dragIniciado(e){
-      e.dataTransfer.setData("text", this.id);
-      this.classList.add("borderPost");
-      var content = document.getElementsByClassName("formTrello");
+      e.dataTransfer.setData("text", e.target.id);
+      // this.classList.add("borderPost");
+      // var content = document.getElementsByClassName("formTrello");
     }
-    function dragFinalizado(e){
+    function dragSobre(e){
+      e.preventDefault();
       this.classList.remove("borderPost");
     }
-    function dragSalioPadre(e){
-      var content = document.getElementsByClassName("formTrello");
-    }
-    function dragSobrePadre(e){
+    function dragSalir(e) {
       e.preventDefault();
-      this.classList.add("pulse", "bounce");
+      this.parentElement.classList.remove("animated", "swing");
     }
-    function soltar(e){
+    function dragSoltar(e){
       e.preventDefault();
-      var elementoArrastrado = e.dataTransfer.getData("text");
-      this.insertBefore(document.getElementById(elementoArrastrado), this.lastElementChild);
-      this.classList.add("pulse", "swing");
+      var idElementoArrastrado = e.dataTransfer.getData("text");
+      this.insertBefore(document.getElementById(idElementoArrastrado),e.target);
+      // this.insertBefore(document.getElementById(elementoArrastrado), this.lastElementChild);
+      this.classList.add("animated", "swing");
     }
   }
+  function iconoCruzHidden(e){
+    anadirForm.classList.add("hidden");
+    lista.classList.remove("hidden");
+  }
+
 });
