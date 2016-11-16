@@ -119,16 +119,15 @@ window.addEventListener("load", function(){
     }
     function dragIniciado(e){
       e.dataTransfer.setData("text", e.target.id);
-      // this.classList.add("borderPost");
-      // var content = document.getElementsByClassName("formTrello");
+      this.classList.add("borderPost");
     }
     function dragSobre(e){
       e.preventDefault();
-      this.classList.remove("borderPost");
     }
     function dragSalir(e) {
       e.preventDefault();
       this.parentElement.classList.remove("animated", "swing");
+      this.classList.remove("borderPost");
     }
     function dragSoltar(e){
       e.preventDefault();

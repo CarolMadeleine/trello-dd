@@ -10,9 +10,9 @@ body{
 }
 header{
   padding: 5px;
-  height: 40px;
   background-color: #458131;
   text-align: center;
+  width: 100%;
 }
 .nombre{
   margin: 4px 10px;
@@ -42,8 +42,6 @@ header{
   border: 1px solid #CDD2D4;
   border-radius: 3px;
   padding: 7px;
-  /*box-sizing: border-box;
-  word-wrap: break-word;*/
 }
 .botonCerrar{
   background-color: #61BD4F;
@@ -163,8 +161,10 @@ div.scroll{
   white-space: nowrap;
 }
 .borderPost{
-  border: 1px dashed #C4C9CC;
-  background-color: yellow;
+  border: 2px dashed #C4C9CC;
+}
+.colorPost{
+  background-color: #458131;
 }
 
 /*A*/
